@@ -1,4 +1,5 @@
 import { createAdminClient } from "@/lib/supabase/admin";
+import { DeleteCustomerButton } from "./delete-customer-button";
 
 export const dynamic = "force-dynamic";
 
@@ -116,6 +117,7 @@ export default async function ReferralPage() {
                 <th className="px-4 py-2">Invitato da</th>
                 <th className="px-4 py-2">Sconto</th>
                 <th className="px-4 py-2">Iscritto il</th>
+                <th className="px-4 py-2">Azioni</th>
               </tr>
             </thead>
             <tbody>
@@ -137,6 +139,9 @@ export default async function ReferralPage() {
                     </td>
                     <td className="px-4 py-2">
                       {new Date(c.created_at).toLocaleDateString("it-IT")}
+                    </td>
+                    <td className="px-4 py-2">
+                      <DeleteCustomerButton customerId={c.id} nome={c.nome} />
                     </td>
                   </tr>
                 );
