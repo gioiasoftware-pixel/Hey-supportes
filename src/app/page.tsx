@@ -1,4 +1,5 @@
 import { Logo } from "@/components/logo";
+import { TripAdvisorButton } from "@/components/tripadvisor-button";
 
 export default function Home() {
   return (
@@ -9,6 +10,9 @@ export default function Home() {
         <p className="text-sm text-brand/70">
           Registrati per ottenere il 10% di sconto sulla tua prossima cena e invita un amico: se
           viene a cena, il tuo sconto sale al 15%.
+        </p>
+        <p className="text-sm text-brand/70">
+          In più, sia tu che il tuo amico riceverete un calice di spumante di benvenuto in omaggio.
         </p>
       </div>
       <div className="flex w-full max-w-xs flex-col gap-3">
@@ -24,6 +28,7 @@ export default function Home() {
         >
           Ho già un account
         </a>
+        <TripAdvisorButton />
       </div>
     </div>
   );
