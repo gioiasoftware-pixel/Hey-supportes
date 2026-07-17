@@ -1,8 +1,9 @@
 "use server";
 
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { inviaEmailBenvenuto } from "@/lib/resend";
 
 export async function registerCustomer(_prevState: { error?: string } | null, formData: FormData) {
   const email = String(formData.get("email") || "").trim().toLowerCase();
@@ -61,7 +62,7 @@ export async function registerCustomer(_prevState: { error?: string } | null, fo
       sconto_scade_il: scadenza.toISOString(),
       marketing_opt_in: marketingOptIn,
     })
-    .select("id")
+    .select("id, referral_code")
     .single();
 
   if (error || !customer) {
@@ -75,6 +76,15 @@ export async function registerCustomer(_prevState: { error?: string } | null, fo
       stato: "pending",
     });
   }
+
+  const headersList = await headers();
+  const host = headersList.get("host") ?? "localhost:3000";
+  const protocol = host.startsWith("localhost") ? "http" : "https";
+  await inviaEmailBenvenuto({
+    to: email,
+    nome,
+    referralUrl: `${protocol}://${host}/registrati?ref=${customer.referral_code}`,
+  });
 
   const cookieStore = await cookies();
   cookieStore.set("customer_id", customer.id, {

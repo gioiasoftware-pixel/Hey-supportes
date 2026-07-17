@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { requireAdmin } from "@/lib/supabase/require-admin";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { inviaEmailUpgradeSconto } from "@/lib/resend";
 
 async function scontoValidoDaSettings(supabase: ReturnType<typeof createAdminClient>) {
   const { data: setting } = await supabase
@@ -69,6 +70,16 @@ export async function confermaPresenza(reservationId: string, formData: FormData
       .update({ sconto_applicato: 15 })
       .eq("customer_id", referral.referrer_id)
       .eq("stato", "confirmed");
+
+    const { data: referrer } = await supabase
+      .from("customers")
+      .select("nome, email")
+      .eq("id", referral.referrer_id)
+      .single();
+
+    if (referrer) {
+      await inviaEmailUpgradeSconto({ to: referrer.email, nome: referrer.nome });
+    }
   }
 
   revalidatePath("/admin/prenotazioni");
