@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { RegistrationForm } from "./registration-form";
 import { TripAdvisorButton } from "@/components/tripadvisor-button";
+import { DiscountDisclaimer } from "@/components/discount-disclaimer";
 import cocktail from "@/assets/cocktail.png";
 
 export default async function RegistratiPage({
@@ -35,6 +36,7 @@ export default async function RegistratiPage({
         </p>
         <RegistrationForm refCode={ref ?? ""} />
         <TripAdvisorButton className="mt-6" />
+        <DiscountDisclaimer className="mt-4" />
       </div>
     </div>
   );

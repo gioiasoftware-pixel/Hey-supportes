@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { Logo } from "@/components/logo";
 import { TripAdvisorButton } from "@/components/tripadvisor-button";
+import { DiscountDisclaimer } from "@/components/discount-disclaimer";
 import sala from "@/assets/sala.png";
 
 export default function Home() {
@@ -45,6 +46,7 @@ export default function Home() {
           </a>
           <TripAdvisorButton />
         </div>
+        <DiscountDisclaimer className="max-w-md" />
       </div>
     </div>
   );

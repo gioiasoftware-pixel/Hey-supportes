@@ -4,6 +4,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { ShareButton } from "./share-button";
 import { TripAdvisorButton } from "@/components/tripadvisor-button";
 import { RotatingBackground } from "@/components/rotating-background";
+import { DiscountDisclaimer } from "@/components/discount-disclaimer";
 import tonno from "@/assets/tonno.png";
 import cappuccino from "@/assets/cappuccino.png";
 import sfilettare from "@/assets/sfilettare.png";
@@ -69,6 +70,7 @@ export default async function AccountPage() {
           >
             Prenota un tavolo
           </a>
+          <DiscountDisclaimer className="mt-3" />
         </div>
 
         <div className="rounded-lg border border-foreground/20 p-5">
