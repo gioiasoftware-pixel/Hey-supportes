@@ -20,9 +20,11 @@ export default async function ReferralPage() {
   const { data: customers } = await supabase
     .from("customers")
     .select(
-      "id, nome, email, telefono, referral_code, sconto_percentuale, sconto_scade_il, created_at, referrer:referred_by(nome)",
+      "id, nome, email, telefono, referral_code, sconto_percentuale, sconto_scade_il, created_at, marketing_opt_in, privacy_accepted_at, referrer:referred_by(nome)",
     )
     .order("created_at", { ascending: false });
+
+  const iscrittiMarketing = customers?.filter((c) => c.marketing_opt_in).length ?? 0;
 
   const totaleReferral = referrals?.length ?? 0;
   const confermati = referrals?.filter((r) => r.stato === "confirmed").length ?? 0;
@@ -66,6 +68,10 @@ export default async function ReferralPage() {
         <div className="rounded-lg border border-brand/20 p-4">
           <p className="text-sm text-brand/70">Costo sconti applicati</p>
           <p className="text-2xl font-bold text-brand">€{costoSconti.toFixed(2)}</p>
+        </div>
+        <div className="rounded-lg border border-brand/20 p-4">
+          <p className="text-sm text-brand/70">Iscritti al marketing</p>
+          <p className="text-2xl font-bold text-brand">{iscrittiMarketing}</p>
         </div>
       </div>
 
@@ -117,6 +123,7 @@ export default async function ReferralPage() {
                 <th className="px-4 py-2">Invitato da</th>
                 <th className="px-4 py-2">Sconto</th>
                 <th className="px-4 py-2">Iscritto il</th>
+                <th className="px-4 py-2">Marketing</th>
                 <th className="px-4 py-2">Azioni</th>
               </tr>
             </thead>
@@ -139,6 +146,18 @@ export default async function ReferralPage() {
                     </td>
                     <td className="px-4 py-2">
                       {new Date(c.created_at).toLocaleDateString("it-IT")}
+                    </td>
+                    <td className="px-4 py-2">
+                      {c.marketing_opt_in ? (
+                        <span>
+                          Sì
+                          <span className="block text-xs text-brand/50">
+                            dal {new Date(c.privacy_accepted_at).toLocaleDateString("it-IT")}
+                          </span>
+                        </span>
+                      ) : (
+                        "No"
+                      )}
                     </td>
                     <td className="px-4 py-2">
                       <DeleteCustomerButton customerId={c.id} nome={c.nome} />
