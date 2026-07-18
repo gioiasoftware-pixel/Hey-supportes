@@ -10,6 +10,7 @@ export default function Home() {
         src={sala}
         alt="La sala di HEY"
         fill
+        sizes="100vw"
         priority
         placeholder="blur"
         className="object-cover"
