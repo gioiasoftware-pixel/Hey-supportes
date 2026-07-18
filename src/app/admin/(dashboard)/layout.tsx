@@ -4,6 +4,7 @@ import { LogoutButton } from "../logout-button";
 
 const NAV_ITEMS = [
   { href: "/admin/prenotazioni", label: "Prenotazioni" },
+  { href: "/admin/clienti", label: "Clienti" },
   { href: "/admin/date-bloccate", label: "Date bloccate" },
   { href: "/admin/referral", label: "Referral" },
   { href: "/admin/impostazioni", label: "Impostazioni" },
