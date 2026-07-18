@@ -1,8 +1,12 @@
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
+import Image from "next/image";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { ShareButton } from "./share-button";
 import { TripAdvisorButton } from "@/components/tripadvisor-button";
+import tonno from "@/assets/tonno.png";
+import cappuccino from "@/assets/cappuccino.png";
+import sfilettare from "@/assets/sfilettare.png";
 
 export default async function AccountPage() {
   const cookieStore = await cookies();
@@ -75,6 +79,27 @@ export default async function AccountPage() {
       </div>
 
       <TripAdvisorButton />
+
+      <div className="grid grid-cols-3 gap-2">
+        <Image
+          src={tonno}
+          alt="Un momento in sala da HEY"
+          placeholder="blur"
+          className="aspect-square w-full rounded-lg object-cover"
+        />
+        <Image
+          src={cappuccino}
+          alt="Uno dei nostri dessert"
+          placeholder="blur"
+          className="aspect-square w-full rounded-lg object-cover"
+        />
+        <Image
+          src={sfilettare}
+          alt="La cura degli ingredienti da HEY"
+          placeholder="blur"
+          className="aspect-square w-full rounded-lg object-cover"
+        />
+      </div>
 
       <div>
         <p className="text-sm font-medium text-brand/70">Le tue prenotazioni</p>

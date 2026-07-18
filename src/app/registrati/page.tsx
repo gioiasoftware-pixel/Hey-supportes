@@ -1,5 +1,7 @@
+import Image from "next/image";
 import { RegistrationForm } from "./registration-form";
 import { TripAdvisorButton } from "@/components/tripadvisor-button";
+import cocktail from "@/assets/cocktail.png";
 
 export default async function RegistratiPage({
   searchParams,
@@ -19,6 +21,12 @@ export default async function RegistratiPage({
       <p className="mt-2 text-sm text-brand/70">
         In più, sia tu che il tuo amico riceverete un calice di spumante di benvenuto in omaggio.
       </p>
+      <Image
+        src={cocktail}
+        alt="Il calice di benvenuto omaggio"
+        placeholder="blur"
+        className="mt-4 h-40 w-full rounded-lg object-cover"
+      />
       <RegistrationForm refCode={ref ?? ""} />
       <TripAdvisorButton className="mt-6" />
     </div>

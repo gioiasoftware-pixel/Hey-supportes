@@ -37,6 +37,10 @@ yarn-error.log*
 # vercel
 .vercel
 
+# cartella di lavoro per foto originali non ancora scelte/ottimizzate
+# (le foto effettivamente usate stanno in src/assets e public/)
+/assets
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

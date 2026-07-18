@@ -12,9 +12,17 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const SITE_URL = "https://heysupport.netlify.app";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: "HEY Supporters",
   description: "Il programma referral di HEY: invita un amico, ottieni uno sconto.",
+  openGraph: {
+    title: "HEY Supporters",
+    description: "Il programma referral di HEY: invita un amico, ottieni uno sconto.",
+    images: ["/og-image.png"],
+  },
 };
 
 export default function RootLayout({
