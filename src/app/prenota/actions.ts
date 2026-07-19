@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { ORARI_DISPONIBILI } from "@/lib/orari";
+import { inviaEmailNuovaPrenotazione } from "@/lib/resend";
 
 export async function createReservation(_prevState: { error?: string } | null, formData: FormData) {
   const cookieStore = await cookies();
@@ -51,7 +52,7 @@ export async function createReservation(_prevState: { error?: string } | null, f
 
   const { data: customer } = await supabase
     .from("customers")
-    .select("sconto_percentuale, sconto_scade_il")
+    .select("nome, email, telefono, sconto_percentuale, sconto_scade_il")
     .eq("id", customerId)
     .single();
 
@@ -70,6 +71,18 @@ export async function createReservation(_prevState: { error?: string } | null, f
 
   if (error) {
     return { error: "Errore durante la prenotazione. Riprova." };
+  }
+
+  if (customer) {
+    await inviaEmailNuovaPrenotazione({
+      clienteNome: customer.nome,
+      clienteEmail: customer.email,
+      clienteTelefono: customer.telefono,
+      data,
+      orario,
+      numeroPersone,
+      scontoApplicato,
+    });
   }
 
   redirect("/account");
