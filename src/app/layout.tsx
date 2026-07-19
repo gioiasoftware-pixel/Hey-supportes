@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "HEY Supporters",
     description: "Il programma referral di HEY: invita un amico, ottieni uno sconto.",
-    images: ["/og-image.png"],
+    images: [{ url: "/og-image.png", width: 586, height: 527 }],
   },
 };
 
