@@ -12,7 +12,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const SITE_URL = "https://heysupport.netlify.app";
+const SITE_URL = "https://heyrestaurant.it";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

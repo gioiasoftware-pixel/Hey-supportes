@@ -1,10 +1,7 @@
 import { Resend } from "resend";
 import { createAdminClient } from "@/lib/supabase/admin";
 
-// Mittente di test di Resend: funziona da subito senza dominio verificato.
-// Quando il ristorante avrà un dominio proprio, sostituire con
-// "prenotazioni@<dominio>" dopo averlo verificato su resend.com/domains.
-const FROM = "HEY Supporters <onboarding@resend.dev>";
+const FROM = "HEY Supporters <prenotazioni@heyrestaurant.it>";
 
 export const DEFAULT_BENVENUTO_OGGETTO = "Benvenuto in HEY Supporters";
 export const DEFAULT_BENVENUTO_CORPO = `Ciao {{nome}},
