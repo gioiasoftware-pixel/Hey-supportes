@@ -13,10 +13,6 @@ export default async function ReferralPage() {
     )
     .order("created_at", { ascending: false });
 
-  const { count: totaleClienti } = await supabase
-    .from("customers")
-    .select("id", { count: "exact", head: true });
-
   const { data: customers } = await supabase
     .from("customers")
     .select(
@@ -24,55 +20,17 @@ export default async function ReferralPage() {
     )
     .order("created_at", { ascending: false });
 
-  const iscrittiMarketing = customers?.filter((c) => c.marketing_opt_in).length ?? 0;
-
-  const totaleReferral = referrals?.length ?? 0;
-  const confermati = referrals?.filter((r) => r.stato === "confirmed").length ?? 0;
-  const tassoConversione = totaleReferral > 0 ? Math.round((confermati / totaleReferral) * 100) : 0;
-
-  const { data: cenePagate } = await supabase
-    .from("reservations")
-    .select("importo_conto, sconto_applicato")
-    .eq("stato", "completed")
-    .not("importo_conto", "is", null);
-
-  const incassoTotale =
-    cenePagate?.reduce(
-      (tot, r) => tot + r.importo_conto! * (1 - r.sconto_applicato / 100),
-      0,
-    ) ?? 0;
-  const costoSconti =
-    cenePagate?.reduce((tot, r) => tot + r.importo_conto! * (r.sconto_applicato / 100), 0) ?? 0;
-
   return (
     <div className="flex flex-col gap-6">
-      <h1 className="text-xl font-bold text-brand">Referral</h1>
-
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 lg:grid-cols-5">
-        <div className="rounded-lg border border-brand/20 p-4">
-          <p className="text-sm text-brand/70">Clienti totali</p>
-          <p className="text-2xl font-bold text-brand">{totaleClienti ?? 0}</p>
-        </div>
-        <div className="rounded-lg border border-brand/20 p-4">
-          <p className="text-sm text-brand/70">Referral inviati</p>
-          <p className="text-2xl font-bold text-brand">{totaleReferral}</p>
-        </div>
-        <div className="rounded-lg border border-brand/20 p-4">
-          <p className="text-sm text-brand/70">Tasso di conversione</p>
-          <p className="text-2xl font-bold text-brand">{tassoConversione}%</p>
-        </div>
-        <div className="rounded-lg border border-brand/20 p-4">
-          <p className="text-sm text-brand/70">Incassato (netto sconto)</p>
-          <p className="text-2xl font-bold text-brand">€{incassoTotale.toFixed(2)}</p>
-        </div>
-        <div className="rounded-lg border border-brand/20 p-4">
-          <p className="text-sm text-brand/70">Costo sconti applicati</p>
-          <p className="text-2xl font-bold text-brand">€{costoSconti.toFixed(2)}</p>
-        </div>
-        <div className="rounded-lg border border-brand/20 p-4">
-          <p className="text-sm text-brand/70">Iscritti al marketing</p>
-          <p className="text-2xl font-bold text-brand">{iscrittiMarketing}</p>
-        </div>
+      <div>
+        <h1 className="text-xl font-bold text-brand">Referral</h1>
+        <p className="mt-1 text-sm text-brand/70">
+          Per le statistiche aggregate (tassi di conversione, K-factor, incassi...) vai su{" "}
+          <a href="/admin/statistiche" className="underline">
+            Statistiche
+          </a>
+          .
+        </p>
       </div>
 
       <div className="overflow-x-auto rounded-lg border border-brand/20">

@@ -7,6 +7,7 @@ const NAV_ITEMS = [
   { href: "/admin/clienti", label: "Clienti" },
   { href: "/admin/date-bloccate", label: "Date bloccate" },
   { href: "/admin/referral", label: "Referral" },
+  { href: "/admin/statistiche", label: "Statistiche" },
   { href: "/admin/comunicazioni", label: "Comunicazioni" },
   { href: "/admin/impostazioni", label: "Impostazioni" },
 ];
