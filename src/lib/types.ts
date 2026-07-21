@@ -33,6 +33,8 @@ export interface Reservation {
   numero_persone: number;
   stato: ReservationStatus;
   sconto_applicato: number;
+  importo_conto: number | null;
+  note: string | null;
   created_at: string;
 }
 

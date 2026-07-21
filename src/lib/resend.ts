@@ -23,6 +23,19 @@ Il tuo amico è venuto a cena da noi grazie al tuo invito: il tuo sconto è sali
 A presto,
 HEY`;
 
+export const DEFAULT_CONFERMA_OGGETTO = "La tua prenotazione da HEY";
+export const DEFAULT_CONFERMA_CORPO = `Ciao {{nome}},
+
+La tua prenotazione è confermata:
+
+Data: {{data}}
+Orario: {{orario}}
+Persone: {{persone}}
+Sconto applicato: {{sconto}}%
+
+A presto,
+HEY`;
+
 function getClient() {
   if (!process.env.RESEND_API_KEY) return null;
   return new Resend(process.env.RESEND_API_KEY);
@@ -135,6 +148,8 @@ export async function inviaEmailNuovaPrenotazione(params: {
   orario: string;
   numeroPersone: number;
   scontoApplicato: number;
+  note?: string | null;
+  tipo?: "nuova" | "modificata";
 }) {
   const resend = getClient();
   if (!resend) return;
@@ -142,13 +157,15 @@ export async function inviaEmailNuovaPrenotazione(params: {
   const emailInterna = await getSetting("email_notifiche_prenotazioni", "");
   if (!emailInterna) return;
 
+  const modificata = params.tipo === "modificata";
+
   try {
     await resend.emails.send({
       from: FROM,
       to: emailInterna,
-      subject: `Nuova prenotazione: ${params.clienteNome} · ${params.data} ${params.orario}`,
+      subject: `${modificata ? "Prenotazione modificata" : "Nuova prenotazione"}: ${params.clienteNome} · ${params.data} ${params.orario}`,
       html: testoInHtml(
-        `Nuova prenotazione ricevuta dal gestionale referral.
+        `${modificata ? "Una prenotazione è stata modificata" : "Nuova prenotazione ricevuta"} dal gestionale referral.
 
 Cliente: ${params.clienteNome}
 Email: ${params.clienteEmail}
@@ -156,10 +173,78 @@ Telefono: ${params.clienteTelefono}
 Data: ${params.data}
 Orario: ${params.orario}
 Persone: ${params.numeroPersone}
-Sconto applicato: ${params.scontoApplicato}%`,
+Sconto applicato: ${params.scontoApplicato}%${params.note ? `\nNote: ${params.note}` : ""}`,
       ),
     });
   } catch (error) {
     console.error("Errore invio email notifica nuova prenotazione:", error);
+  }
+}
+
+export async function inviaEmailConfermaPrenotazione(params: {
+  to: string;
+  nome: string;
+  data: string;
+  orario: string;
+  numeroPersone: number;
+  scontoApplicato: number;
+  note?: string | null;
+  tipo?: "nuova" | "modificata";
+}) {
+  const resend = getClient();
+  if (!resend) return;
+
+  try {
+    const oggettoBase = await getSetting("email_conferma_oggetto", DEFAULT_CONFERMA_OGGETTO);
+    const corpo = await getSetting("email_conferma_corpo", DEFAULT_CONFERMA_CORPO);
+    const modificata = params.tipo === "modificata";
+    const oggetto = modificata ? `Aggiornamento: ${oggettoBase}` : oggettoBase;
+
+    let testoFinale = riempiTemplate(corpo, {
+      nome: params.nome,
+      data: params.data,
+      orario: params.orario,
+      persone: String(params.numeroPersone),
+      sconto: String(params.scontoApplicato),
+    });
+    if (params.note) {
+      testoFinale += `\n\nNote da te indicate: ${params.note}`;
+    }
+
+    await resend.emails.send({
+      from: FROM,
+      to: params.to,
+      subject: oggetto,
+      html: testoInHtml(testoFinale),
+    });
+  } catch (error) {
+    console.error("Errore invio email conferma prenotazione:", error);
+  }
+}
+
+export async function inviaEmailAmicoHaPrenotato(params: {
+  to: string;
+  nomeReferrer: string;
+  nomeAmico: string;
+}) {
+  const resend = getClient();
+  if (!resend) return;
+
+  try {
+    await resend.emails.send({
+      from: FROM,
+      to: params.to,
+      subject: "Il tuo amico ha prenotato da HEY!",
+      html: testoInHtml(
+        `Ciao ${params.nomeReferrer},
+
+Il tuo amico ${params.nomeAmico} ha appena prenotato un tavolo da HEY grazie al tuo invito. Se verrà davvero a cena, il tuo sconto salirà al 15%.
+
+A presto,
+HEY`,
+      ),
+    });
+  } catch (error) {
+    console.error("Errore invio email amico ha prenotato:", error);
   }
 }

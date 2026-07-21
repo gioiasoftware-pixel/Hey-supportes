@@ -16,7 +16,7 @@ export default async function PrenotaPage() {
   const supabase = createAdminClient();
   const { data: prenotazioneAttiva } = await supabase
     .from("reservations")
-    .select("id, data, orario, numero_persone")
+    .select("id, data, orario, numero_persone, note")
     .eq("customer_id", customerId)
     .eq("stato", "confirmed")
     .maybeSingle();
@@ -33,6 +33,7 @@ export default async function PrenotaPage() {
           data={prenotazioneAttiva.data}
           orario={prenotazioneAttiva.orario}
           numeroPersone={prenotazioneAttiva.numero_persone}
+          note={prenotazioneAttiva.note}
         />
       </div>
     );

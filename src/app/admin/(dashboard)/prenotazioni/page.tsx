@@ -9,7 +9,7 @@ export default async function PrenotazioniPage() {
   const { data: reservations } = await supabase
     .from("reservations")
     .select(
-      "id, data, orario, numero_persone, stato, sconto_applicato, importo_conto, customers(nome, email, telefono)",
+      "id, data, orario, numero_persone, stato, sconto_applicato, importo_conto, note, customers(nome, email, telefono)",
     )
     .order("data", { ascending: true });
 
@@ -47,6 +47,9 @@ export default async function PrenotazioniPage() {
                     <div className="text-xs text-brand/50">
                       {customer?.email} · {customer?.telefono}
                     </div>
+                    {r.note && (
+                      <div className="mt-1 text-xs font-semibold text-red-600">Note: {r.note}</div>
+                    )}
                   </td>
                   <td className="px-4 py-2">{r.numero_persone}</td>
                   <td className="px-4 py-2">{r.sconto_applicato}%</td>

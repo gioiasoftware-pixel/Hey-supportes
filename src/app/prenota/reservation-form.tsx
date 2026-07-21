@@ -61,6 +61,15 @@ export function ReservationForm() {
         />
       </label>
 
+      <label className="flex flex-col gap-1 text-sm font-medium text-brand">
+        Note (allergie, intolleranze, richieste particolari)
+        <textarea
+          name="note"
+          rows={3}
+          className="rounded-md border border-brand/20 px-3 py-2 text-base outline-none focus:border-brand"
+        />
+      </label>
+
       {state?.error && <p className="text-sm font-medium text-red-600">{state.error}</p>}
 
       <button

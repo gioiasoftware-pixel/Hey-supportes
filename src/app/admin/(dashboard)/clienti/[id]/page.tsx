@@ -26,7 +26,7 @@ export default async function ClienteDettaglioPage({
 
   const { data: reservations } = await supabase
     .from("reservations")
-    .select("id, data, orario, numero_persone, stato, sconto_applicato, importo_conto")
+    .select("id, data, orario, numero_persone, stato, sconto_applicato, importo_conto, note")
     .eq("customer_id", id)
     .order("data", { ascending: false });
 
@@ -102,6 +102,7 @@ export default async function ClienteDettaglioPage({
                 <th className="px-4 py-2">Sconto</th>
                 <th className="px-4 py-2">Conto</th>
                 <th className="px-4 py-2">Pagato (netto)</th>
+                <th className="px-4 py-2">Note</th>
               </tr>
             </thead>
             <tbody>
@@ -119,6 +120,7 @@ export default async function ClienteDettaglioPage({
                       ? `€${(r.importo_conto * (1 - r.sconto_applicato / 100)).toFixed(2)}`
                       : "—"}
                   </td>
+                  <td className="px-4 py-2 text-red-600">{r.note || "—"}</td>
                 </tr>
               ))}
             </tbody>

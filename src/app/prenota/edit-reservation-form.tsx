@@ -9,11 +9,13 @@ export function EditReservationForm({
   data,
   orario,
   numeroPersone,
+  note,
 }: {
   reservationId: string;
   data: string;
   orario: string;
   numeroPersone: number;
+  note: string | null;
 }) {
   const [state, formAction, pending] = useActionState(updateReservation, null);
   const today = new Date().toISOString().split("T")[0];
@@ -69,6 +71,16 @@ export function EditReservationForm({
           min={1}
           defaultValue={numeroPersone}
           required
+          className="rounded-md border border-brand/20 px-3 py-2 text-base outline-none focus:border-brand"
+        />
+      </label>
+
+      <label className="flex flex-col gap-1 text-sm font-medium text-brand">
+        Note (allergie, intolleranze, richieste particolari)
+        <textarea
+          name="note"
+          rows={3}
+          defaultValue={note ?? ""}
           className="rounded-md border border-brand/20 px-3 py-2 text-base outline-none focus:border-brand"
         />
       </label>
